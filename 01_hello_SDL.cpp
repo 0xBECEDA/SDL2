@@ -27,6 +27,8 @@ SDL_Surface* gScreenSurface = NULL;
 //изображение, которое мы загрузим и покажем на экране
 SDL_Surface* gHelloWorld = NULL;
 
+SDL_Renderer* renderer = NULL;
+
 bool init()
 {
 //инициализация флага (?) что это такое?
@@ -41,8 +43,9 @@ bool init()
     } else {
         // в противном случае создаем окно
 // gWindow (переменная, внутри которой указатель(?) на место, по которому лежит окно в памяти) приравнена к функции SDL_CreateWindow, которая должна создать окно (?)
-        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        //    gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
         // если указатель равен NULL,
+        SDL_CreateWindowAndRenderer( SCREEN_WIDTH,SCREEN_HEIGHT , 0, &gWindow, &renderer);
         if( gWindow == NULL ) {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 // все плохо, устанавливаем false
@@ -50,7 +53,7 @@ bool init()
         } else {
             //в противном случае устанавливаем поверхность окна
             // переменная gScreenSurface (в которой указатель на поверхность окна в памяти (?)) приравнена к функции SDL_GetWindowSurface, у котоой в качестве параметра переменная gWindow, где теперь лежит адрес нашено окна (?)
-            gScreenSurface = SDL_GetWindowSurface( gWindow );
+            //   gScreenSurface = SDL_GetWindowSurface( gWindow );
         }
     }
     // возвращаем "успех" (возвращаем куда? куда попадает "уведомление", что все прошло успешно?)
@@ -63,23 +66,36 @@ bool loadMedia()
     bool success = true;
 //пробуем загрузить рисунок
     // переменная  gHelloWorld ( в которой лежит указатель на наш рисунок) приравнена к функции SDL_LoadBMP (которая и грузит изображение, как я понимаю). Чтоб все загрузилось, надо указать правильный путь.
-    gHelloWorld = SDL_LoadBMP( "hello_world.bmp" );
-// если указатель в  gHelloWorld равен нулю,
-    if( gHelloWorld == NULL ) {
-        printf( "Unable to load image %s! SDL Error: %s\n", "~/Desktop/make/hello_world.bmp", SDL_GetError() );
-// все плохо, устанавливаем false
-        success = false;
-    }
+    // gHelloWorld = SDL_LoadBMP("hello_world.bmp");
+
+    // renderer = SDL_CreateRenderer(gWindow, -1, 0);
+// если указатель в  gHelloWorld рaвен нулю,
+      //  if( gHelloWorld == NULL ) {
+      //  printf( "Unable to load image %s! SDL Error: %s\n", "~/Desktop/make/hello_world.bmp", SDL_GetError() );
+      //  success = false;
+      // }
+      //  if ( renderer == NULL) {
+      // printf( "Unable to load render %s! SDL Error: %s\n", "~/Desktop/make/hello_world.bmp", SDL_GetError() );
+
+    // все плохо, устанавливаем false
+    // success = false;
+    //  }
     // в противном случае возвращаем "успех" (опять же, куда? )
+ SDL_RenderDrawPoint (renderer, 400, 300);
+  SDL_RenderPresent (renderer);
+
     return success;
 }
 
 void close()
 {
-//зачистка изображение
+//зачистка изображение -
     // берем функцию  SDL_FreeSurface с параметром gHelloWorld (зачем?) и говорим, что gHelloWorld снова равен NULL
-    SDL_FreeSurface( gHelloWorld );
-    gHelloWorld = NULL;
+    // SDL_FreeSurface( gHelloWorld );
+    // gHelloWorld = NULL;
+
+    // SDL_RenderClear( renderer );
+    // renderer = NULL;
 //уничтожаем окно
     //в общем, аналогично
     SDL_DestroyWindow( gWindow );
@@ -103,12 +119,16 @@ int main( int argc, char* args[] )
             printf( "Failed to load media!\n" );
         } else {
             //добавляем изображение. Что тут с аргументами пока что не понимаю.
-            SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
+            //            SDL_BlitSurface( gHelloWorld , NULL, gScreenSurface, NULL );
             //обновляем изображение
-            SDL_UpdateWindowSurface( gWindow );
+            //    SDL_UpdateWindowSurface( gWindow );
+            SDL_RenderDrawPoint (renderer, 400, 300);
+
+                    SDL_RenderPresent (renderer);
+
 
             //ждем пару секунд
-            SDL_Delay( 2000 );
+            SDL_Delay( 5000 );
 
         }
     }

@@ -2,7 +2,7 @@
 OBJS = 01_hello_SDL.cpp
 
 #CC specifies which compiler we're using
-CC = g++
+CC = gcc
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
